@@ -11,6 +11,10 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
 class UKF {
+private: 
+    MatrixXd GenerateSigmaPoints();
+    void PredictSigmaPoints(MatrixXd Xsig_aug, double delta_t);
+    void PredictMeanAndCovariance();
 public:
 
   ///* initially set to false, set to true in first call of ProcessMeasurement
@@ -54,6 +58,15 @@ public:
 
   ///* Radar measurement noise standard deviation radius change in m/s
   double std_radrd_ ;
+  
+  ///* Radar measurement covariance matrix
+  MatrixXd R_radar_;
+  
+  ///* Laser measurement covariance matrix
+  MatrixXd R_laser_;
+  
+  ///* Laser measurement matrix
+  MatrixXd H_laser_;
 
   ///* Weights of sigma points
   VectorXd weights_;
@@ -63,10 +76,17 @@ public:
 
   ///* Augmented state dimension
   int n_aug_;
+  ///* No of sigma points to be generated
+  int n_sig_;
 
   ///* Sigma point spreading parameter
   double lambda_;
-
+  
+  ///* Variable to store NIS of radar
+  float NIS_radar_;
+  
+  ///* Variable to store NIS of lidar
+  float NIS_laser_;
 
   /**
    * Constructor
